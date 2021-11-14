@@ -9,7 +9,7 @@ function email_check($conn, $email) {
 }
 
 function password_check($conn, $email, $password) {
-    $sql = "SELECT created FROM users where email='$email' and secret='".md5($password)."'";
+    $sql = "SELECT created FROM users where email='$email' and secret='$password'";
     $result = $conn->query($sql);
 
     return ($result->num_rows === 1) ? TRUE : FALSE;
@@ -17,7 +17,8 @@ function password_check($conn, $email, $password) {
 
 function fetch_user($conn, $email, $password) {
     $user = [];
-    $sql = "SELECT id,name,email,created FROM users where email='$email' and secret='".md5($password)."'";
+    // TODO: aviod query duplicates.
+    $sql = "SELECT id,name,email,created FROM users where email='$email' and secret='$password'";
     $result = $conn->query($sql);
 
     if ($result->num_rows === 1) {
@@ -32,7 +33,7 @@ function session_handler($user) {
     unset($_SESSION);
 
     $_SESSION['xyz_user'] = $user;
-    return base64_encode($user['id']);
+    return isset($user['id']) ? TRUE : FALSE;
 }
 
 function authentication($email, $password) {
@@ -60,7 +61,5 @@ function authentication($email, $password) {
     $conn->close();
 
     echo json_encode($output, JSON_PRETTY_PRINT);
-    return $output['auth'];
+    return $output;
 }
-
-?>

@@ -12,7 +12,4 @@ function dbconn() {
       exit();
     }
     return $conn;
-    // printf("Success... %s\n", mysqli_get_host_info($conn));
 }
-
-?>
