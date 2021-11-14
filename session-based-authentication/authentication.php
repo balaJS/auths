@@ -29,16 +29,18 @@ function fetch_user($conn, $email, $password) {
 }
 
 function session_handler($user) {
-    session_start();
-    unset($_SESSION);
-
     $_SESSION['xyz_user'] = $user;
     return isset($user['id']) ? TRUE : FALSE;
 }
 
 function authentication($email, $password) {
+    session_start();
     $conn = dbconn();
     $user = [];
+
+    if (isset($_SESSION['xyz_user'])) {
+        unset($_SESSION['xyz_user']);
+    }
 
     $output = [
         'auth' => FALSE,
@@ -59,7 +61,5 @@ function authentication($email, $password) {
     }
 
     $conn->close();
-
-    echo json_encode($output, JSON_PRETTY_PRINT);
     return $output;
 }

@@ -7,13 +7,12 @@ $output = [
     'type' => 'error'
 ];
 
-if (!isset($_SESSION['xyz_user']) || !isset($_SESSION['xyz_user']['id'])) {
-    // TODO: get authentication first.
-    echo json_encode($output);
-    return;
-} else {
+if (isset($_SESSION['xyz_user']) && isset($_SESSION['xyz_user']['id'])) {
     $output['user'] = $_SESSION['xyz_user'];
+    $output['type'] = 'success';
+    $output['msg'] = 'Welcome ' . $output['user']['name'];
+
     unset($output['user']['id']);
-    echo json_encode($output);
-    return;
 }
+echo json_encode($output, JSON_PRETTY_PRINT);
+exit;
