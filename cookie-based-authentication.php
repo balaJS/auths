@@ -1,4 +1,5 @@
 <?php
+require_once 'db.php';
 require_once 'authentication.php';
 
 $email = isset($_POST['user_email']) ? $_POST['user_email'] : '';
