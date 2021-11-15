@@ -1,9 +1,13 @@
 <?php
 
 function email_check($conn, $email) {
-    $sql = "SELECT id, secret FROM users where email='$email'";
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare("SELECT id, secret FROM users where email=?");
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
     $user = $result->fetch_assoc();
+
     $output = [
         'id' => NULL,
         'secret' => '',
@@ -19,16 +23,18 @@ function email_check($conn, $email) {
 }
 
 function password_check($conn, $userdata, $password) {
-    // echo password_hash($password, PASSWORD_BCRYPT), "<br>";
-    // echo $userdata['secret'], "<br>";
-    return password_verify($password, $userdata['secret']) ? TRUE : FALSE;
+    $match = password_verify($password, $userdata['secret']);
+    return $match ? TRUE : FALSE;
 }
 
 function fetch_user($conn, $id) {
-    $user = [];
+    $user = NULL;
 
-    $sql = "SELECT id,name,email,created FROM users where id='$id'";
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare("SELECT id,name,email,created FROM users where id=?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
 
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
