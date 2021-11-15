@@ -1,9 +1,7 @@
 <?php
 if (isset($_POST['user_email']) && isset($_POST['user_pass'])) {
-    require_once 'api-interface.php';
-
     $API = 'web';
-    $output = auth_api();
+    require_once 'api-interface.php';
 
     if ($output['auth']) {
         header('Location: profile.php');

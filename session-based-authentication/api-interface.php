@@ -1,6 +1,4 @@
 <?php
-global $API;
-$API = 'rest';
 
 function auth_api() {
     global $API;
@@ -26,6 +24,8 @@ function auth_api() {
     return $output;
 }
 
-if ($API === 'rest') {
-    auth_api();
+if (!isset($API)) {
+    $API = 'rest';
 }
+
+$output = auth_api();
