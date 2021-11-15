@@ -15,13 +15,5 @@
   <input type="submit" value="Submit">
 </form>
 
-<script src="2.5.3-crypto-md5.js"></script>
-<script>
-    document.getElementById('login-form').addEventListener('submit', function() {
-        var $password = document.getElementById('user_pass');
-        var passhash = Crypto.MD5($password.value).toString();
-        $password.value = passhash;
-    });
-</script>
 </body>
 </html>
